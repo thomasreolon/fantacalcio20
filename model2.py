@@ -14,13 +14,14 @@ models = [
     neighbors.KNeighborsRegressor(2, weights='uniform')
 ]
 
+# loss functions
+
 
 def f1(a, b): return abs((a-b)*(b-5))
-def f2(a, b): return 3**(abs(a-b)-3)
 def f3(a, b): return abs(a-b)
 
 
-print("(err*distance5)    (exp(err>3))   (diff avg)")
+print("(err*distance5)    (diff avg)")
 
 
 def loss(Yt, Yp, f):
@@ -63,7 +64,7 @@ for i, model in enumerate(models):
     model = model.fit(X, Y)
     Yp = model.predict(Xt)
 
-    error = (loss(Yt, Yp, f1), loss(Yt, Yp, f2), loss(Yt, Yp, f3))
+    error = (loss(Yt, Yp, f1),  loss(Yt, Yp, f3))
     models[i] = model
     err.append(error)
 

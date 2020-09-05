@@ -9,7 +9,7 @@ averages = {}
 with open('./data/fantadata.json', 'r') as fin:
     data = json.load(fin)
 
-
+# load dataset
 for foot in data:
     pl = data[foot]
     if '18' in pl and '19' in pl:
@@ -23,6 +23,7 @@ for foot in data:
         X1.append(x)
         X2.append(x2)
 
+# load models, and get predictions
 for fname in models:
     model = pickle.load(open('./best_models/{}.pk'.format(fname), 'rb'))
     if 'b' in fname:
@@ -39,23 +40,26 @@ res2 = []
 for k, v in averages.items():
     res2.append((k, v['vote'], v['role']))
 
+# order by vote
 
-def sf(k):
-    return k[1]
+
+def sf(k): return k[1]
 
 
 res2.sort(key=sf, reverse=True)
 
-
+# drop player with low votes
 cc = [(x, y-5, z) for x, y, z in res2 if z == 4][:60]
 aa = [(x, y-5, z) for x, y, z in res2 if z == 8][:40]
 
+# sum the votes
 ctot, atot = 0, 0
 for block in cc:
     ctot += block[1]**2
 for block in aa:
     atot += block[1]**2
 
+# predict votes: budget * vote / sum_votes
 prices = {}
 for name, vote, role in cc:
     prices[name] = (100+int(role)*15)*10 * vote**2 / ctot
@@ -64,5 +68,7 @@ for name, vote, role in aa:
     r += vote**2
     prices[name] = (100+int(role)*15)*10 * (vote**2) / atot
 
+
+# save on file
 with open('./results/res2.json', 'w') as fout:
     json.dump(prices, fout)

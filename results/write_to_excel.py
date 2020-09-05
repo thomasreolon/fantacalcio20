@@ -7,7 +7,7 @@ FILE_NAMES = ["res", "res2", "stats"]    # same folder , .json
 prices = {}
 changes = [(1, COL_IDX, "prev."),
            (1, COL_IDX+1, "price"),
-           (1, COL_IDX+2, "(2017-18-19) || fantavoto | goals | assist | p.giocate | voto_base | rigori")
+           (1, COL_IDX+2, "fantavoto | goals | assist | p.giocate | voto_base | rigori // (2017-18-19)")
            ]
 
 

@@ -7,6 +7,7 @@ import csv
 results = {}
 keys = None
 
+# for each file
 for i in range(17, 20):
     # load file
     filename = "./raw_/raw_fanta/{}.xlsx".format(i)
@@ -32,7 +33,7 @@ for i in range(17, 20):
             keys = list(results[name][i].keys())
 
 
-# final results
+# final results: string containing all the latest stats
 final = {}
 for foot in results:
     summary = []
@@ -40,8 +41,12 @@ for foot in results:
         rss = []
         for i in range(17, 20):
             if i in results[foot]:
-                rss.append(str(results[foot][i][stat]))
+                val = results[foot][i][stat]
+                if round(val) == val:
+                    val = int(val)
+                rss.append(str(val))
             else:
+                # use a placeholder if no data was found for that year
                 rss.append('**')
         summary.append("-".join(rss))
     final[foot] = " | ".join(summary)

@@ -9,6 +9,7 @@ test_names = {'dybala', 'higuain', 'immobile', 'zielinski',
 with open('./data/fantadata.json', 'r') as fin:
     data = json.load(fin)
 
+# get dataset (for testing)
 for i in range(15, 20):
     for foot in data:
         pl = data[foot]
@@ -23,6 +24,8 @@ for i in range(15, 20):
             Xt.append(x)
             Yt.append(pl[str(i+2)]['fanta'])
 
+
+# shows the prediction
 for i in range(1, 6):
     model = pickle.load(open('./models/b{}.pk'.format(i), 'rb'))
     Yp = model.predict(Xt)
