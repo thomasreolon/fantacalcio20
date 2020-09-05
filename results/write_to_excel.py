@@ -2,30 +2,34 @@ from xlrd import open_workbook
 from xlutils.copy import copy
 import json
 
-COL_IDX = 5
-changes = [(1, 5, "Model Prevision")]
+COL_IDX = 7
+FILE_NAMES = ["res", "res2", "stats"]    # same folder , .json
 prices = {}
+changes = [(1, COL_IDX, "prev."),
+           (1, COL_IDX+1, "price"),
+           (1, COL_IDX+2, "(2017-18-19) || fantavoto | goals | assist | p.giocate | voto_base | rigori")
+           ]
 
-# millions
-with open('./res2.json', 'r') as fin:
-    prices = json.load(fin)
+
+def get_data(fnames):
+    to_write = []
+    for fn in fnames:
+        with open('./{}.json'.format(fn), 'r') as fin:
+            to_write.append(json.load(fin))
+    return to_write
 
 
-# marks
-with open('./res.json', 'r') as fin:
-    data = json.load(fin)
-
+# load info (res->marks; res2->prices)
+to_write = get_data(FILE_NAMES)
 
 # read cells
 rb = open_workbook("Quotazioni_Fantacalcio.xlsx")
 xl_sheet = rb.sheet_by_index(0)
 for row_idx in range(2, xl_sheet.nrows):
     name = xl_sheet.cell(row_idx, 2).value.lower()
-    if name in data:
-        changes.append((row_idx, COL_IDX, data[name]))
-    if name in prices:
-        changes.append((row_idx, COL_IDX+1, prices[name]))
-
+    for i, dic in enumerate(to_write):
+        if name in dic:
+            changes.append((row_idx, COL_IDX+i, dic[name]))
 
 wb = copy(rb)
 w = wb.get_sheet(0)
